@@ -1,0 +1,83 @@
+{
+  "name": "first-monorepo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/first-monorepo/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/first-monorepo",
+        "index": "apps/first-monorepo/src/index.html",
+        "baseHref": "/",
+        "main": "apps/first-monorepo/src/main.tsx",
+        "tsConfig": "apps/first-monorepo/tsconfig.app.json",
+        "assets": [
+          "apps/first-monorepo/src/favicon.ico",
+          "apps/first-monorepo/src/assets"
+        ],
+        "styles": ["apps/first-monorepo/src/styles.scss"],
+        "scripts": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/first-monorepo/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/first-monorepo/src/environments/environment.ts",
+              "with": "apps/first-monorepo/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "first-monorepo:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "first-monorepo:build:development"
+        },
+        "production": {
+          "buildTarget": "first-monorepo:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/first-monorepo/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/first-monorepo/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
